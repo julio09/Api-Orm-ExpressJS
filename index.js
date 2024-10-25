@@ -4,10 +4,17 @@ const cors = require("cors");
 const app = express();
 
 const corsOptions = {
-    origin: "http://localhost:3031"
+    origin: "http://localhost:5173"
 };
 
-app.use(cors(corsOptions));
+
+app.use(
+    cors({
+        corsOptions,
+        credentials:true,
+        origin: true
+    }),
+);
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -33,7 +40,14 @@ db.sequelize.sync()
 // simple route
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to API application." });
+    res.setHeader("access-control-allow-origin", "*");
+    res.setHeader("access-control-allow-credentials", "true");
+    res.setHeader("access-control-allow-headers", "content-type");
+    res.setHeader(
+        "access-control-allow-methods",
+        "GET, POST, PUT, DELETE, PATCH, OPTION")
 });
+
 
 require("./routes/tuto.route")(app);
 
